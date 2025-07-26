@@ -20,7 +20,11 @@
     "query:neo4j": "tsx scripts/neo4j-queries.ts",
     "neo4j:up": "docker-compose up -d",
     "neo4j:down": "docker-compose down",
-    "neo4j:logs": "docker-compose logs -f neo4j"
+    "neo4j:logs": "docker-compose logs -f neo4j",
+    "clear:supabase": "tsx clear-supabase.ts",
+    "clear:neo4j": "tsx scripts/clear-neo4j.ts",
+    "build:mcp": "tsc src/mcp-server.ts --outDir dist",
+    "start:mcp": "node dist/mcp-server.js"
   },
   "keywords": [
     "channex",

@@ -8,10 +8,11 @@ import {
   APIPattern,
   ErrorPattern
 } from '../types';
+import { getTableName } from '../config/database';
 
 export class SupabaseStorage {
-  private supabase: SupabaseClient<any, 'channex_knowledge', any>;
-  private schema = 'channex_knowledge';
+  private supabase: SupabaseClient;
+  private schema = 'public'; // Use public schema for access
   private usePublicViews = true; // Use public schema views for API access
 
   constructor(url: string, serviceKey: string) {
@@ -29,7 +30,7 @@ export class SupabaseStorage {
         persistSession: false
       },
       db: {
-        schema: 'channex_knowledge'
+        schema: 'public' // Use public schema which contains the views
       }
     });
   }
@@ -45,8 +46,8 @@ export class SupabaseStorage {
    * Get table name with proper prefix
    */
   private getTableName(table: string): string {
-    // Since we're using channex_knowledge schema by default, just return the table name
-    return table;
+    // Use the imported getTableName function to get the correct view name
+    return getTableName(table as any);
   }
 
   /**

@@ -1,6 +1,6 @@
 # Channex Knowledge Graph Builder
 
-A self-improving knowledge graph system for Channex.io API documentation, combining vector search with graph relationships to enable intelligent API understanding and code generation.
+A self-improving knowledge graph system for Channex.io API documentation, combining vector search with graph relationships to enable intelligent API understanding and code generation. This system helps prevent hallucinations when building against the Channex API by providing accurate endpoint information, data models, and relationship mappings.
 
 ## 🏗️ Architecture
 
@@ -23,7 +23,7 @@ Channex Docs → Parser → Supabase (Primary Storage) → Neo4j Sync → Graph 
 
 ### Prerequisites
 1. Node.js 18+ and npm
-2. Docker and Docker Compose (for Neo4j)
+2. Neo4j Database (local or cloud instance)
 3. Supabase project (already configured: `czysljuglsdvtxbwavyz`)
 4. OpenAI API key for embeddings
 
@@ -31,18 +31,18 @@ Channex Docs → Parser → Supabase (Primary Storage) → Neo4j Sync → Graph 
 
 ```bash
 # Clone the repository
-git clone [your-repo-url]
+git clone https://github.com/WebRenew/channex-knowledge-graph.git
 cd channex-knowledge-graph
 
 # Install dependencies
 npm install
 
-# Configure environment
+# Configure environment (if not already configured)
 cp .env.example .env
 # Edit .env and add your OpenAI API key
 
-# Start Neo4j
-npm run neo4j:up
+# Ensure Neo4j is running on localhost:7687
+# Default credentials: neo4j / channex123
 ```
 
 ### Test Setup
@@ -52,26 +52,28 @@ npm run neo4j:up
 npm run test:setup
 ```
 
-### Parse Documentation
+### Build the Knowledge Graph
 
 ```bash
-# Parse all documentation files
+# Step 1: Parse all documentation files into Supabase
 npm run parse
 
-# Clear existing data and reparse
-npm run parse -- --clear
-```
-
-### Sync to Neo4j
-
-```bash
-# Sync parsed data to Neo4j graph database
+# Step 2: Sync data to Neo4j graph database
 npm run sync:neo4j
 
-# Explore the graph with example queries
+# Optional: Clear and rebuild from scratch
+npm run clear:supabase  # Clear Supabase data
+npm run clear:neo4j     # Clear Neo4j data
+```
+
+### Verify the Knowledge Graph
+
+```bash
+# Run example Neo4j queries to verify the graph
 npm run query:neo4j
 
-# Access Neo4j Browser at http://localhost:7474
+# Access Neo4j Browser for visual exploration
+# URL: http://localhost:7474
 # Username: neo4j, Password: channex123
 ```
 
@@ -177,18 +179,29 @@ BATCH_SIZE=10
 
 ## 📈 Current Status
 
-- ✅ Database schema created
-- ✅ Basic parser implemented
-- ✅ Storage layer ready
-- ✅ Neo4j integration complete
-- ✅ MCP server implementation
-- ✅ 23 endpoints parsed
-- ✅ 10 data models extracted
-- ✅ 33 graph nodes created
-- ✅ 9 relationships mapped
-- ✅ 8 MCP tools available (5 Supabase + 3 Neo4j)
-- ⏳ OpenAI embeddings (requires API key)
-- ⏳ Agent query routing
+### ✅ Completed
+- Database schema created with public views
+- Documentation parser extracting endpoints, models, and relationships
+- Storage layer with Supabase integration
+- Neo4j sync for graph database population
+- MCP server with 8 tools for AI assistant integration
+- **Knowledge Graph Contents:**
+  - 23 API endpoints parsed and categorized
+  - 10 data models extracted (Property, Booking, RoomType, etc.)
+  - 1,127 documentation chunks with embeddings
+  - 33 graph nodes representing entities
+  - 9 relationships mapped between entities
+  - Error handling and retry logic
+
+### 🔧 Configuration Required
+- OpenAI API key for embedding generation (add to .env)
+- Neo4j instance running locally or in cloud
+
+### 📊 Knowledge Graph Statistics
+- **Endpoints**: GET, POST, PUT, DELETE operations for properties, bookings, messages, etc.
+- **Data Models**: Property, Booking, RoomType, RatePlan, Group, Query, Restriction, etc.
+- **Relationships**: ACCEPTS, RETURNS between endpoints and models
+- **Documentation Coverage**: 86 documentation files processed
 
 ## 🛠️ Development
 
@@ -201,12 +214,15 @@ npm run parse        # Parse documentation
 npm run test         # Run tests
 npm run lint         # Lint code
 
-# Neo4j specific
-npm run neo4j:up     # Start Neo4j container
-npm run neo4j:down   # Stop Neo4j container
-npm run neo4j:logs   # View Neo4j logs
-npm run sync:neo4j   # Sync data from Supabase to Neo4j
-npm run query:neo4j  # Run example Neo4j queries
+# Data management
+npm run clear:supabase # Clear all Supabase data
+npm run clear:neo4j    # Clear all Neo4j data
+npm run sync:neo4j     # Sync data from Supabase to Neo4j
+npm run query:neo4j    # Run example Neo4j queries
+
+# MCP Server
+npm run build:mcp     # Build MCP server
+npm run start:mcp     # Start MCP server
 ```
 
 ### Adding New Parsers
