@@ -17,6 +17,7 @@
     "clean": "rm -rf dist node_modules",
     "install:clean": "npm run clean && npm install",
     "sync:neo4j": "tsx scripts/sync-to-neo4j.ts",
+    "sync:neo4j:enhanced": "tsx scripts/run-enhanced-sync.ts",
     "query:neo4j": "tsx scripts/neo4j-queries.ts",
     "neo4j:up": "docker-compose up -d",
     "neo4j:down": "docker-compose down",
