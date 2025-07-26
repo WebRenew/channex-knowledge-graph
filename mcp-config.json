@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "channex-knowledge": {
+      "command": "node",
+      "args": ["/Users/tradecraft/Desktop/Supahost Workspace/working-files/channex-knowledge-graph/dist/mcp-server.js"],
+      "env": {
+        "KNOWLEDGE_DB_URL": "postgresql://postgres:=Channex123@db.czysljuglsdvtxbwavyz.supabase.co:5432/postgres",
+        "KNOWLEDGE_DB_SERVICE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN6eXNsanVnbHNkdnR4Yndhdnl6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MzU1MTUwNCwiZXhwIjoyMDY5MTI3NTA0fQ.jz8l_7nYyEJpdAq23EN6rIEgA6unFkH2eKm4k1moPX8"
+      }
+    }
+  }
+}
