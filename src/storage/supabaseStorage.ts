@@ -27,6 +27,9 @@ export class SupabaseStorage {
     this.supabase = createClient(supabaseUrl, serviceKey, {
       auth: {
         persistSession: false
+      },
+      db: {
+        schema: 'channex_knowledge'
       }
     });
   }
@@ -42,7 +45,8 @@ export class SupabaseStorage {
    * Get table name with proper prefix
    */
   private getTableName(table: string): string {
-    return this.usePublicViews ? `kg_${table}` : table;
+    // Since we're using channex_knowledge schema by default, just return the table name
+    return table;
   }
 
   /**

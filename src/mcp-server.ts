@@ -16,7 +16,12 @@ dotenv.config();
 const supabaseUrl = 'https://czysljuglsdvtxbwavyz.supabase.co';
 const supabase = createClient(
   supabaseUrl,
-  process.env.KNOWLEDGE_DB_SERVICE_KEY!
+  process.env.KNOWLEDGE_DB_SERVICE_KEY!,
+  {
+    db: {
+      schema: 'channex_knowledge'
+    }
+  }
 );
 
 // Initialize Neo4j driver
@@ -180,7 +185,7 @@ class ChannexKnowledgeServer {
     const { query, method, category } = args;
     
     let queryBuilder = supabase
-      .from('channex_knowledge.endpoints')
+      .from('endpoints')
       .select('method, path, category, description, parameters, examples');
     
     if (method) {
@@ -213,7 +218,7 @@ class ChannexKnowledgeServer {
     const { path } = args;
     
     const { data, error } = await supabase
-      .from('channex_knowledge.endpoints')
+      .from('endpoints')
       .select('*')
       .eq('path', path)
       .single();
@@ -234,7 +239,7 @@ class ChannexKnowledgeServer {
     const { query, limit = 5 } = args;
     
     const { data, error } = await supabase
-      .from('channex_knowledge.doc_chunks')
+      .from('doc_chunks')
       .select('content, metadata, source_file')
       .textSearch('content', query)
       .limit(limit);
@@ -255,7 +260,7 @@ class ChannexKnowledgeServer {
     const { name } = args;
     
     const { data, error } = await supabase
-      .from('channex_knowledge.data_models')
+      .from('data_models')
       .select('*')
       .eq('name', name)
       .single();
@@ -277,7 +282,7 @@ class ChannexKnowledgeServer {
     
     // For now, return endpoints in the same category
     const { data: currentEndpoint } = await supabase
-      .from('channex_knowledge.endpoints')
+      .from('endpoints')
       .select('category')
       .eq('path', endpoint)
       .single();
@@ -287,7 +292,7 @@ class ChannexKnowledgeServer {
     }
     
     const { data, error } = await supabase
-      .from('channex_knowledge.endpoints')
+      .from('endpoints')
       .select('method, path, description')
       .eq('category', currentEndpoint.category)
       .neq('path', endpoint)
