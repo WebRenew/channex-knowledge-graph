@@ -63,7 +63,7 @@ export class Neo4jSync {
     const supabaseUrl = 'https://czysljuglsdvtxbwavyz.supabase.co';
     this.supabase = createClient(
       supabaseUrl,
-      process.env.KNOWLEDGE_DB_ANON_KEY!
+      process.env.KNOWLEDGE_DB_SERVICE_KEY || process.env.KNOWLEDGE_DB_ANON_KEY!
     );
   }
 
@@ -111,9 +111,8 @@ export class Neo4jSync {
     try {
       // Fetch endpoints from Supabase
       const { data: endpoints, error } = await this.supabase
-        .from('endpoints')
-        .select('*')
-        .eq('schema', 'channex_knowledge');
+        .from('kg_endpoints')
+        .select('*');
 
       if (error) throw error;
 
@@ -134,11 +133,11 @@ export class Neo4jSync {
             id: endpoint.id,
             path: endpoint.path,
             method: endpoint.method,
-            category: endpoint.category,
-            description: endpoint.description,
-            authentication: endpoint.authentication,
-            rate_limit: endpoint.rate_limit,
-            doc_reference: endpoint.doc_reference
+            category: endpoint.category || '',
+            description: endpoint.description || '',
+            authentication: endpoint.authentication || '',
+            rate_limit: endpoint.rate_limit || '',
+            doc_reference: endpoint.doc_reference || ''
           }
         );
       }
@@ -154,9 +153,9 @@ export class Neo4jSync {
     try {
       // Fetch data models from Supabase
       const { data: models, error } = await this.supabase
-        .from('data_models')
+        .from('kg_data_models')
         .select('*')
-        .eq('schema', 'channex_knowledge');
+;
 
       if (error) throw error;
 
@@ -173,9 +172,9 @@ export class Neo4jSync {
           {
             id: model.id,
             name: model.name,
-            description: model.description,
-            attributes: JSON.stringify(model.attributes),
-            doc_reference: model.doc_reference
+            description: model.description || '',
+            attributes: JSON.stringify(model.attributes || {}),
+            doc_reference: model.doc_reference || ''
           }
         );
 
@@ -206,9 +205,9 @@ export class Neo4jSync {
     try {
       // Fetch workflows from Supabase
       const { data: workflows, error } = await this.supabase
-        .from('workflows')
+        .from('kg_workflows')
         .select('*')
-        .eq('schema', 'channex_knowledge');
+;
 
       if (error) throw error;
 
@@ -225,9 +224,9 @@ export class Neo4jSync {
           {
             id: workflow.id,
             name: workflow.name,
-            description: workflow.description,
-            steps: JSON.stringify(workflow.steps),
-            category: workflow.category
+            description: workflow.description || '',
+            steps: JSON.stringify(workflow.steps || []),
+            category: workflow.category || ''
           }
         );
       }
@@ -243,9 +242,9 @@ export class Neo4jSync {
     try {
       // Fetch graph nodes from Supabase
       const { data: nodes, error } = await this.supabase
-        .from('graph_nodes')
+        .from('kg_graph_nodes')
         .select('*')
-        .eq('schema', 'channex_knowledge');
+;
 
       if (error) throw error;
 
@@ -264,8 +263,8 @@ export class Neo4jSync {
 
         await session.run(query, {
           id: node.id,
-          label: node.label,
-          properties: node.properties
+          label: node.label || 'Node',
+          properties: node.properties || {}
         });
       }
 
@@ -280,9 +279,9 @@ export class Neo4jSync {
     try {
       // Fetch graph edges from Supabase
       const { data: edges, error } = await this.supabase
-        .from('graph_edges')
+        .from('kg_graph_edges')
         .select('*')
-        .eq('schema', 'channex_knowledge');
+;
 
       if (error) throw error;
 
@@ -299,7 +298,7 @@ export class Neo4jSync {
         await session.run(query, {
           sourceId: edge.source_id,
           targetId: edge.target_id,
-          relType: edge.relationship_type,
+          relType: edge.relationship_type || 'RELATED_TO',
           properties: edge.properties || {}
         });
       }

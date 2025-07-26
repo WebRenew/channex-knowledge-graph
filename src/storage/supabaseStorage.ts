@@ -10,7 +10,7 @@ import {
 } from '../types';
 
 export class SupabaseStorage {
-  private supabase: SupabaseClient;
+  private supabase: SupabaseClient<any, 'channex_knowledge', any>;
   private schema = 'channex_knowledge';
   private usePublicViews = true; // Use public schema views for API access
 
