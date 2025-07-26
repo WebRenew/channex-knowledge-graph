@@ -180,9 +180,8 @@ class ChannexKnowledgeServer {
     const { query, method, category } = args;
     
     let queryBuilder = supabase
-      .from('endpoints')
-      .select('method, path, category, description, parameters, examples')
-      .eq('schema', 'channex_knowledge');
+      .from('channex_knowledge.endpoints')
+      .select('method, path, category, description, parameters, examples');
     
     if (method) {
       queryBuilder = queryBuilder.eq('method', method);
@@ -214,9 +213,8 @@ class ChannexKnowledgeServer {
     const { path } = args;
     
     const { data, error } = await supabase
-      .from('endpoints')
+      .from('channex_knowledge.endpoints')
       .select('*')
-      .eq('schema', 'channex_knowledge')
       .eq('path', path)
       .single();
     
@@ -236,9 +234,8 @@ class ChannexKnowledgeServer {
     const { query, limit = 5 } = args;
     
     const { data, error } = await supabase
-      .from('doc_chunks')
+      .from('channex_knowledge.doc_chunks')
       .select('content, metadata, source_file')
-      .eq('schema', 'channex_knowledge')
       .textSearch('content', query)
       .limit(limit);
     
@@ -258,9 +255,8 @@ class ChannexKnowledgeServer {
     const { name } = args;
     
     const { data, error } = await supabase
-      .from('data_models')
+      .from('channex_knowledge.data_models')
       .select('*')
-      .eq('schema', 'channex_knowledge')
       .eq('name', name)
       .single();
     
@@ -281,9 +277,8 @@ class ChannexKnowledgeServer {
     
     // For now, return endpoints in the same category
     const { data: currentEndpoint } = await supabase
-      .from('endpoints')
+      .from('channex_knowledge.endpoints')
       .select('category')
-      .eq('schema', 'channex_knowledge')
       .eq('path', endpoint)
       .single();
     
@@ -292,9 +287,8 @@ class ChannexKnowledgeServer {
     }
     
     const { data, error } = await supabase
-      .from('endpoints')
+      .from('channex_knowledge.endpoints')
       .select('method, path, description')
-      .eq('schema', 'channex_knowledge')
       .eq('category', currentEndpoint.category)
       .neq('path', endpoint)
       .limit(5);
