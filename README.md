@@ -7,6 +7,7 @@ A self-improving knowledge graph system for Channex.io API documentation, combin
 ### Hybrid Storage Approach
 - **PostgreSQL (Supabase)**: Vector embeddings for semantic search, structured data storage
 - **Neo4j**: Graph relationships, traversal queries, and pattern matching
+- **MCP Server**: Model Context Protocol server for AI assistant integration
 - **Agent Logic**: Intelligent routing between storage types
 
 ### Data Flow
@@ -14,6 +15,8 @@ A self-improving knowledge graph system for Channex.io API documentation, combin
 Channex Docs → Parser → Supabase (Primary Storage) → Neo4j Sync → Graph Queries
                             ↓                            ↓
                     Vector Embeddings            Relationship Graphs
+                            ↓                            ↓
+                        MCP Server ← → Claude AI Assistant
 ```
 
 ## 🚀 Quick Start
@@ -72,6 +75,18 @@ npm run query:neo4j
 # Username: neo4j, Password: channex123
 ```
 
+### Use as MCP Server
+
+```bash
+# Build the MCP server
+npm run build
+
+# Run with Claude CLI
+claude --mcp "node dist/mcp-server.js"
+
+# Or configure for Claude Desktop (see MCP-SETUP.md)
+```
+
 ## 📁 Project Structure
 
 ```
@@ -81,7 +96,8 @@ channex-knowledge-graph/
 │   ├── embeddings/       # Vector embedding generation
 │   ├── storage/          # Database operations
 │   ├── sync/            # Neo4j synchronization
-│   └── types/           # TypeScript definitions
+│   ├── types/           # TypeScript definitions
+│   └── mcp-server.ts    # MCP server implementation
 ├── scripts/
 │   ├── parse-docs.ts    # Main parsing script
 │   ├── test-setup.ts    # Setup verification
@@ -89,8 +105,10 @@ channex-knowledge-graph/
 │   └── neo4j-queries.ts # Example graph queries
 ├── channex-docs/        # Raw documentation (88 files)
 ├── docs/               # Project documentation
+├── dist/               # Compiled JavaScript (after build)
 ├── docker-compose.yml   # Neo4j container setup
-└── tests/              # Unit tests
+├── .mcp.json.example   # MCP configuration template
+└── MCP-SETUP.md        # MCP setup guide
 ```
 
 ## 🔧 Configuration
@@ -163,10 +181,12 @@ BATCH_SIZE=10
 - ✅ Basic parser implemented
 - ✅ Storage layer ready
 - ✅ Neo4j integration complete
+- ✅ MCP server implementation
 - ✅ 23 endpoints parsed
 - ✅ 10 data models extracted
 - ✅ 33 graph nodes created
 - ✅ 9 relationships mapped
+- ✅ 8 MCP tools available (5 Supabase + 3 Neo4j)
 - ⏳ OpenAI embeddings (requires API key)
 - ⏳ Agent query routing
 
@@ -229,8 +249,39 @@ MIT
 
 ## 📚 Additional Documentation
 
+- [MCP Setup Guide](./MCP-SETUP.md) - Configure the MCP server for AI assistants
 - [Neo4j Setup Guide](./README-neo4j.md) - Detailed Neo4j configuration and usage
 - [Neo4j Schema Design](./docs/neo4j-schema.md) - Graph schema documentation
+
+## 🤖 MCP Server Features
+
+The project includes a Model Context Protocol (MCP) server that provides AI assistants with direct access to the knowledge graph:
+
+### Available Tools
+
+**Supabase Tools (Vector Search):**
+- `search_endpoints` - Search API endpoints by query, method, or category
+- `get_endpoint_details` - Get detailed information about specific endpoints
+- `search_documentation` - Semantic search through documentation
+- `get_data_model` - Retrieve data model specifications
+- `find_related_endpoints` - Discover endpoint relationships
+
+**Neo4j Tools (Graph Traversal):**
+- `graph_traversal` - Explore the knowledge graph from any starting node
+- `find_workflow_path` - Find paths between endpoints through the graph
+- `get_property_hierarchy` - Get complete property structures with rooms and rates
+
+### MCP Usage
+
+```bash
+# Quick start with Claude CLI
+claude --mcp "node dist/mcp-server.js"
+
+# With environment variables
+KNOWLEDGE_DB_SERVICE_KEY="your-key" claude --mcp "node dist/mcp-server.js"
+```
+
+See [MCP-SETUP.md](./MCP-SETUP.md) for detailed configuration instructions.
 
 ## 🙏 Acknowledgments
 
@@ -238,3 +289,4 @@ MIT
 - Ottomator project for architecture inspiration
 - Supabase for vector storage capabilities
 - Neo4j for graph database capabilities
+- Anthropic MCP for AI integration protocol

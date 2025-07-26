@@ -11,6 +11,10 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 
+# MCP configuration (contains keys)
+.mcp.json
+mcp-config.json
+
 # Build output
 dist/
 build/

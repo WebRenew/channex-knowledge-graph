@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "channex-knowledge": {
+      "command": "node",
+      "args": [
+        "/path/to/channex-knowledge-graph/dist/mcp-server.js"
+      ],
+      "env": {
+        "KNOWLEDGE_DB_SERVICE_KEY": "your-supabase-service-role-key",
+        "NEO4J_URI": "bolt://localhost:7687",
+        "NEO4J_USER": "neo4j",
+        "NEO4J_PASSWORD": "channex123"
+      }
+    }
+  }
+}
