@@ -4,14 +4,14 @@
   "description": "Knowledge graph builder for Channex.io API documentation",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json",
     "dev": "tsx watch src/index.ts",
     "parse": "tsx scripts/parse-docs.ts",
     "test": "jest",
     "test:setup": "tsx scripts/test-setup.ts",
     "query": "tsx scripts/query-examples.ts",
     "agent:demo": "tsx scripts/agent-demo.ts",
-    "mcp:build": "tsc src/mcp-server.ts --outDir dist",
+    "mcp:build": "tsc -p tsconfig.build.json",
     "mcp:start": "node dist/mcp-server.js",
     "lint": "eslint src/**/*.ts",
     "clean": "rm -rf dist node_modules",
@@ -23,9 +23,7 @@
     "neo4j:down": "docker-compose down",
     "neo4j:logs": "docker-compose logs -f neo4j",
     "clear:supabase": "tsx clear-supabase.ts",
-    "clear:neo4j": "tsx scripts/clear-neo4j.ts",
-    "build:mcp": "tsc src/mcp-server.ts --outDir dist",
-    "start:mcp": "node dist/mcp-server.js"
+    "clear:neo4j": "tsx scripts/clear-neo4j.ts"
   },
   "keywords": [
     "channex",

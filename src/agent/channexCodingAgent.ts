@@ -1,5 +1,5 @@
-import { SupabaseStorage } from './storage/supabaseStorage';
-import { EmbeddingGenerator } from './embeddings/generator';
+import { SupabaseStorage } from '../storage/supabaseStorage';
+import { EmbeddingGenerator } from '../embeddings/generator';
 
 /**
  * Channex Knowledge Agent - Self-improving coding assistant
